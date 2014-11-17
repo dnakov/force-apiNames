@@ -1,6 +1,6 @@
 {
     "name": "Salesforce API Fieldnames",
-    "version": "0.0.12",
+    "version": "0.1.1",
     "manifest_version": 2,
     "description": "Extension shows the API field names on detail pages",
     "icons": {
