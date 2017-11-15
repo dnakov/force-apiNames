@@ -7,10 +7,14 @@ chrome.runtime.onInstalled.addListener(function (details) {
 });
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-	chrome.tabs.executeScript(tab.id, {file: 'scripts/jquery.min.js'}, function() {
-		chrome.tabs.executeScript(tab.id, {code: 'apinamesScriptRun();'});
-	});
-	
+  chrome.tabs.get(tab.id, function(t) {
+    var url = new URL(t.url);
+    var script = 'apinamesScriptRun(\'' + url.origin+ '\');'
+    chrome.tabs.executeScript(tab.id, {file: 'scripts/jquery.min.js'}, function() {
+      chrome.tabs.executeScript(tab.id, {code: script});
+    });
+  })
+
 });
 
 chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {

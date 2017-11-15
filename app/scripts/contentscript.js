@@ -1,9 +1,9 @@
 'use strict';
 
-var apinamesScriptRun = function () {
+var apinamesScriptRun = function (hostPrefix) {
 
- 
-  function replaceWithAPINames() {
+
+  function replaceWithAPINames(hostPrefix) {
 
     window.apinamesScript = window.apinamesScript || {};
     window.apinamesScript.oldLabels = window.apinamesScript.oldLabels || {};
@@ -27,18 +27,17 @@ var apinamesScriptRun = function () {
     var sentMsg = false;
     if(!window.apinamesScript.isOn) {
       let json = (response) => { return response.json() }
-
-      fetch('/services/data/v37.0/sobjects', { method: 'GET', headers: headers }).then(json).then( data => {
+      fetch(hostPrefix + '/services/data/v37.0/sobjects', { method: 'GET', headers: headers }).then(json).then( data => {
         console.log(data)
         for (var i = 0; i < data.sobjects.length; i++) {
           if(data.sobjects[i].keyPrefix == keyPrefix) {
             sObjectName = data.sobjects[i].name;
           }
         };
-        fetch( '/services/data/v37.0/sobjects/' + sObjectName + '/' + sObjectId, { headers:headers }).then(json).then( data => {
+        fetch(hostPrefix + '/services/data/v37.0/sobjects/' + sObjectName + '/' + sObjectId, { headers:headers }).then(json).then( data => {
           recordTypeId = data.RecordTypeId || '012000000000000AAA';
 
-          fetch('/services/data/v37.0/sobjects/' + sObjectName + '/describe/layouts/' + (recordTypeId != null ? recordTypeId : ''), { headers: headers }).then(json).then( data2 => {
+          fetch(hostPrefix + '/services/data/v37.0/sobjects/' + sObjectName + '/describe/layouts/' + (recordTypeId != null ? recordTypeId : ''), { headers: headers }).then(json).then( data2 => {
             var els = document.querySelectorAll('.labelCol');
             data = data2.layouts != null ? data2.layouts[0] : data2;
             let labelMap = {}
@@ -70,6 +69,5 @@ var apinamesScriptRun = function () {
     }
 
   }
-
-  replaceWithAPINames();
+  replaceWithAPINames(hostPrefix);
 };
